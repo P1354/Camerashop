@@ -1,0 +1,854 @@
+																	CART CODE
+<?php
+
+session_start();
+$username=$_SESSION['username'];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+       * {
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            list-style: none;
+            text-decoration: none;
+            scroll-behavior: smooth;
+            border: none;
+            outline: none;
+            color: #000;
+        }
+
+        body {
+            
+            background: #108A4F;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+            padding: 28px 11%;
+            border-bottom: 1px solid transparent;
+            transition: all ease .50s;
+        }
+
+        p {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .navlist {
+            display: flex;
+            align-items: center;
+        }
+
+        .navlist a {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 40px;
+            transition: all ease .40s;
+        }
+
+        .navlist a:hover {
+            color: red;
+        }
+
+        section {
+            padding: 0px 5% 50px;
+        }
+
+        .fa-solid i {
+            color: black;
+            font-size: 35px;
+            text-align: left;
+        }
+
+        .heading {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #000;
+            text-align: center;
+            margin-top: 110px;
+        }
+
+        .row-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+            align-items: center;
+            margin-top: 3rem;
+            color: #000;
+            border-top: 2px solid #000;
+            text-align: center;
+        }
+
+        .row-main p {
+            color: black;
+            font-size: 20px;
+            line-height: 20px;
+            margin-bottom: 1rem;
+            padding: 10px 0 20px 0;
+        }
+
+        .row-main_1 {
+            display: flex;
+            color: #000;
+            border-top: 2px solid lightblue;
+            text-align: center;
+            margin-left: 20px;
+            padding: 15px 0 15px 0;
+            align-items: center;
+        }
+
+        .row-main_1 p {
+            font-size: 20px;
+            line-height: 10px;
+            text-align: center;
+        }
+
+        .sub-row1 {
+            width: 270px;
+        }
+
+        .sub-row2 {
+            width: 40px;
+            margin-left: 190px;
+        }
+
+        .sub-row3 {
+            width: 80px;
+            margin-left: 290px;
+        }
+
+        .sub-row4 {
+            width: 270px;
+            margin-left: 180px;
+        }
+
+        .sub-row5 {
+            border: #000 0.5px solid;
+            border-radius: 5px;
+            width: 30px;
+        }
+
+        .sub-row5 a {
+            font-size: 20px;
+            color: #000;
+            background-color: white;
+            font-weight: 600;
+        }
+        .payment-btn {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.payment-btn button {
+    font-size: 1.2rem;
+    color: #ffffff;
+    background-color: #108A4F;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-btn button:hover {
+    background-color: #0d6c3e;
+}
+
+.payment {
+    margin: 50px auto;
+    text-align: center;
+}
+
+.payment a {
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #ffffff;
+    border: 3px solid #000;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.payment a:hover {
+    background-color: #f0f0f0;
+}
+    </style>
+ </style>
+</head>
+
+<body>
+    <?php
+include 'nav.php';
+    ?>
+    <section>
+        <div class="heading">
+            Your Shopping Cart
+        </div>
+
+        <div class="row-main">
+            <div>
+                <p>Plant Name</p>
+            </div>
+            <div>
+                <p>Quantity</p>
+            </div>
+            <div>
+                <p>Price</p>
+            </div>
+            <div>
+                <p>Total</p>
+            </div>
+			<div>
+            <p>Actions</p>
+        </div>
+        </div>
+        <?php
+     include 'connect.php';
+   
+        $select = "select * from cart where username='$username'";
+       $total=0;
+        $query1 = mysqli_query($con, $select);
+
+        while ($row = mysqli_fetch_array($query1)) {
+            $total=$total+$row['subtotal'];
+        ?>
+            <div class="row-main_1">
+                <div class="sub-row1">
+                    <p><?php echo $row["name"]; ?></p>
+                </div>
+                <div class="sub-row2">
+                    <p><?php echo $row["qty"]; ?></p>
+                </div>
+                <div class="sub-row3">
+                    <p><?php echo $row["price"] ; ?></p>
+                </div>
+                <div class="sub-row4">
+                    <p><?php echo $row["subtotal"]; ?></p>
+                </div>
+				<div class="sub-row5">
+                <a href="remove_from_cart.php?item_id=<?php echo $row['id']; ?>">Remove</a>
+            </div>
+            </div>
+        <?php
+        }
+        ?>
+        <div class="sub-row4">
+                    <p> Total Rs:-<?php echo $total; $_SESSION['total']=$total; ?></p>
+                </div>
+                <div class="payment">
+                   <a href="payment.php" >payment and place order</a>
+                </div>
+    </section>
+</body>
+
+</html>
+
+														REMOVE FROM CART
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php"); // Redirect to login page if user is not logged in
+    exit();
+}
+
+if (!isset($_GET['item_id'])) {
+    // Redirect back to the cart page if item ID is not provided
+    header("Location: cart.php");
+    exit();
+}
+
+$item_id = $_GET['item_id'];
+
+// Include database connection
+include 'connect.php';
+
+// Fetch the item from the cart to confirm it exists and belongs to the user
+$username = $_SESSION['username'];
+$select_item = "SELECT * FROM cart WHERE id = '$item_id' AND username = '$username'";
+$query_item = mysqli_query($con, $select_item);
+
+if (mysqli_num_rows($query_item) > 0) {
+    // Item found, proceed with removal
+    $delete_item = "DELETE FROM cart WHERE id = '$item_id'";
+    if (mysqli_query($con, $delete_item)) {
+        // Item removed successfully, redirect back to cart page
+        header("Location: cart.php");
+        exit();
+    } else {
+        // Error occurred while deleting item, redirect back to cart page with error message
+        header("Location: cart.php?error=delete_failed");
+        exit();
+    }
+} else {
+    // Item not found in the user's cart, redirect back to cart page with error message
+    header("Location: cart.php?error=item_not_found");
+    exit();
+}
+?>
+
+														BACK TO CATEGORIES
+.back-to-home {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.back-to-home a {
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background-color 0.4s;
+}
+
+.back-to-home a:hover {
+    background-color: #666;
+}
+
+     </div>
+		<div class="back-to-home">
+        <a href="cate.php">Back to Categories</a>
+    </div>
+	
+	
+	
+													 ABOUT US
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Nursery Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #3f51b5;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>About Us</h1>
+    </header>
+
+    <div class="container">
+        <h1>Our Mission</h1>
+        <p>We are dedicated to providing a comprehensive and user-friendly online nursery management system. Our mission
+            is to simplify nursery management processes, streamline communication, and empower nurseries to focus more
+            on
+            the growth and development of children.</p>
+
+        <h1>Our Vision</h1>
+        <p>Our vision is to become the leading platform for nursery management, trusted by nurseries worldwide for
+            its
+            efficiency, reliability, and innovation. We aim to continually evolve our system to meet the changing needs
+            of
+            nurseries and ensure the best possible experience for our users.</p>
+
+       <h1>Why Choose Us?</h1>
+	   <p>With our plant management system, you can expect:</p>
+	   <ul>
+			<li>Efficient management of plant records, inventory, and schedules.</li>
+			<li>Streamlined communication between staff and customers.</li>
+			<li>Easy access to important information anytime, anywhere, on any device.</li>
+			<li>Customizable features to suit the unique needs of your plant business.</li>
+			<li>Dedicated support and regular updates to improve functionality.</li>
+		</ul>
+
+        <h1>Our Physical Shop</h1>
+        <p>In addition to our online platform, we also operate a physical shop where you can find a wide variety of
+            plants
+            and gardening supplies. Visit us to explore our collection and get expert advice on plant care and
+            landscaping.</p>
+        <p>Address:Balaji nursery, Anand - Sojitra Rd, Valasan, Gujarat 388120</p>
+
+        <h1>Supplying Plants to Other Shopkeepers</h1>
+        <p>We are proud suppliers of high-quality plants to other shopkeepers. If you're a retail store looking to
+            enhance
+            your offerings with fresh and vibrant plants, get in touch with us to discuss wholesale options.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Nursery Management System. All rights reserved.</p>
+        <a href="home.php">Go to Homepage</a>
+    </footer>
+</body>
+
+</html>
+
+															SQL DATABASE
+															
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE IF NOT EXISTS `cart` (
+  `username` varchar(200) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `qty` int NOT NULL,
+  `price` double NOT NULL,
+  `subtotal` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `contact_us`;
+CREATE TABLE IF NOT EXISTS `contact_us` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `message` text,
+  `submission_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE IF NOT EXISTS `payment` (
+  `cardno` int NOT NULL,
+  `atmpin` int NOT NULL,
+  `cvv` int NOT NULL,
+  `cardname` varchar(250) NOT NULL,
+  UNIQUE KEY `cardno` (`cardno`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `plant`;
+CREATE TABLE IF NOT EXISTS `plant` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `type` varchar(200) NOT NULL,
+  `photo` varchar(200) NOT NULL,
+  `price` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `selling`;
+CREATE TABLE IF NOT EXISTS `selling` (
+  `date` date NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `qty` varchar(200) NOT NULL,
+  `price` varchar(200) NOT NULL,
+  `subtotal` varchar(200) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+COMMIT;
+
+																		HOMEPAGE CODE
+<!-- homepage.php -->
+<?php
+
+session_start();
+$username=$_SESSION['username'];
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plant Management</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+           
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            background-color: #108A4F;
+            background: url('download.jpeg');
+            min-height: 100vh;
+        width: 100%;
+        background-image: linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.70)), url(download.jpeg);
+        background-size: cover;
+        background-position: center;
+            
+
+        }
+
+        .left-navigation ul {
+            display: flex;
+            background-color: #002B46;
+            height: 60px;
+            font-size: 1.3rem;
+            justify-content: space-evenly;
+            align-items: first baseline;
+        }
+
+        #categoriesDropdown {
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+
+            position: absolute;
+
+        }
+
+        #categoriesDropdown:hover {
+            opacity: 100;
+            position: relative;
+        }
+
+        #categoriesDropdown a {
+            color: white;
+        }
+
+        .left-navigation ul li {
+            list-style: none;
+        }
+
+        .left-navigation ul li a {
+
+            list-style: none;
+            color: white;
+            text-decoration: none;
+
+        }
+
+        .footer {
+            background-color: #000;
+        }
+
+        .welcome-section {
+            height: 576px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+
+        }
+
+        #wel {
+            font-size: 6rem;
+           
+        }
+
+        #wel span {
+            color: #DE6F37;
+        }
+
+        #wel2 {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .categories-section {
+            display: flex;
+        }
+
+        .footer ul {
+            display: flex;
+            gap: 20px;
+            font-size: 1.5rem;
+            color: white;
+            justify-content: center;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .footer ul li {
+            list-style: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .lr {
+            display: flex;
+        }
+
+        /* button */
+        .container-button {
+            margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "bt-1 bt-2 bt-3"
+    "bt-4 bt-5 bt-6";
+  position: relative;
+  perspective: 800;
+  padding: 0;
+  width: 135px;
+  height: 47px;
+  transition: all 0.3s ease-in-out;
+}
+
+.container-button:active {
+  transform: scale(0.95);
+}
+
+.hover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+}
+
+.bt-1 {
+  grid-area: bt-1;
+}
+
+.bt-2 {
+  grid-area: bt-2;
+}
+
+.bt-3 {
+  grid-area: bt-3;
+}
+
+.bt-4 {
+  grid-area: bt-4;
+}
+
+.bt-5 {
+  grid-area: bt-5;
+}
+
+.bt-6 {
+  grid-area: bt-6;
+}
+
+.bt-1:hover ~ button {
+  transform: rotateX(15deg) rotateY(-15deg) rotateZ(0deg);
+  box-shadow: -2px -2px #18181888;
+}
+
+.bt-1:hover ~ button::after {
+  animation: shake 0.5s ease-in-out 0.3s;
+  text-shadow: -2px -2px #18181888;
+}
+
+.bt-3:hover ~ button {
+  transform: rotateX(15deg) rotateY(15deg) rotateZ(0deg);
+  box-shadow: 2px -2px #18181888;
+}
+
+.bt-3:hover ~ button::after {
+  animation: shake 0.5s ease-in-out 0.3s;
+  text-shadow: 2px -2px #18181888;
+}
+
+.bt-4:hover ~ button {
+  transform: rotateX(-15deg) rotateY(-15deg) rotateZ(0deg);
+  box-shadow: -2px 2px #18181888;
+}
+
+.bt-4:hover ~ button::after {
+  animation: shake 0.5s ease-in-out 0.3s;
+  text-shadow: -2px 2px #18181888;
+}
+
+.bt-6:hover ~ button {
+  transform: rotateX(-15deg) rotateY(15deg) rotateZ(0deg);
+  box-shadow: 2px 2px #18181888;
+}
+
+.bt-6:hover ~ button::after {
+  animation: shake 0.5s ease-in-out 0.3s;
+  text-shadow: 2px 2px #18181888;
+}
+
+.hover:hover ~ button::before {
+  background: transparent;
+}
+
+.hover:hover ~ button::after {
+  content: "Flower";
+  top: -150%;
+  transform: translate(-50%, 0);
+  font-size: 34px;
+  color: #f19c2b;
+}
+
+button {
+  position: absolute;
+  padding: 0;
+  width: 135px;
+  height: 47px;
+  background: transparent;
+  font-size: 17px;
+  font-weight: 900;
+  border: 3px solid #f39923;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 135px;
+  height: 47px;
+  background-color: #f5ae51;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  z-index: -1;
+}
+
+button::after {
+  content: "Shop";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 135px;
+  height: 47px;
+  background-color: transparent;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 47px;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  z-index: 2;
+}
+
+@keyframes shake {
+  0% {
+    left: 45%;
+  }
+
+  25% {
+    left: 54%;
+  }
+
+  50% {
+    left: 48%;
+  }
+
+  75% {
+    left: 52%;
+  }
+
+  100% {
+    left: 50%;
+  }
+}
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <?php
+        include 'nav.php';
+        ?>
+        <div class="main-content">
+            <div class="welcome-section">
+            <p id="wel2">Hello User,
+            <?php echo $username ?></p>
+                <p id="wel"><span>W</span>elcome <span>T</span>o <span>P</span>lant <span>W</span>ebsite</p>
+                <p id="wel2">Explore a wide variety of plants for your home and garden.</p>
+                <p>
+                    <a href="cate.php">
+                <div class="container-button">
+                    <div class="hover bt-1"></div>
+                    <div class="hover bt-2"></div>
+                    <div class="hover bt-3"></div>
+                    <div class="hover bt-4"></div>
+                    <div class="hover bt-5"></div>
+                    <div class="hover bt-6"></div>
+                    <button></button>
+                </div>
+                </a>
+                </p>
+            </div>
+        </div>
+<div class="footer" style="color: white; text-align: center;">
+    <ul>
+        <li><a href="settings.php">Settings</a></li>
+        <li><a href="contact_us.php">Contact Us</a></li>
+        <li><a href="logout.php">Logout</a></li>
+    </ul>
+    <p style="margin-top: 10px;">Visit Us At:</p>
+    <p style="margin-top: 5px;">Balaji nursery, Anand - Sojitra Rd, Valasan, Gujarat 388120</p>
+     <p style="margin-top: 5px;">Phone: +1234567890</p>
+     <p style="margin-top: 5px;">Email: nurseryshop@gmail.com</p>
+</div>
+</body>
+
+</html>
+
